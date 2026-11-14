@@ -8,7 +8,7 @@ from src.models.decision_tree import train_decision_tree_model
 from src.visualization.eda import plot_eda
 from src.visualization.performance import plot_confusion_matrices
 from src.visualization.performance import plot_roc_curve
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, roc_auc_score, f1_score
 
 #load data
 print("loading data...")
@@ -37,6 +37,12 @@ val_prob_dt = dt_model.predict_proba(X_val)[:, 1]
 
 #plot confusion matrices
 plot_confusion_matrices(y_val, y_val_pred_knn, y_val_pred_dt)
+
+#print validation metrics
+for name, y_pred, y_prob in [("KNN", y_val_pred_knn, val_prob_knn), ("Decision Tree", y_val_pred_dt, val_prob_dt)]:
+    tn, fp, fn, tp = confusion_matrix(y_val, y_pred).ravel()
+    print(f"{name}: ROC AUC {roc_auc_score(y_val, y_prob):.3f}, F1 {f1_score(y_val, y_pred):.3f}, "
+          f"sensitivity {tp / (tp + fn):.3f}, specificity {tn / (tn + fp):.3f}")
 
 #plot ROC Curve
 plot_roc_curve(y_val, val_prob_knn, val_prob_dt)
