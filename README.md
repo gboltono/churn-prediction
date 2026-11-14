@@ -21,6 +21,8 @@ On a 30% validation set (90,938 customers):
 
 ## Run
 
+Download `train.csv` and `test.csv` from the Kaggle competition into `data/raw/`, then:
+
 ```bash
 pip install -r requirements.txt
 python main.py
